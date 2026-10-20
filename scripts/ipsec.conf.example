@@ -1,0 +1,37 @@
+# /etc/ipsec.conf — strongSwan IKEv1 站点对站点模板（VPS 侧，对接家里 TL-R479GPE-AC）
+# 角色分工：VPS=响应方（responder，被动等待）；R479=发起方（初始者模式，对端网关填 VPS 公网 IP）
+# 带 TODO 的行需在勘察后按实际值修改；提案(ike/esp)需与 R479 IPsec 高级设置里的选项逐项对齐
+
+config setup
+    uniqueids=yes          # 家 IP 变化重连时，新 SA 顶掉旧 SA
+
+conn %default
+    keyexchange=ikev1      # R479 仅支持 IKEv1（主模式/野蛮模式）
+    authby=psk
+    ikelifetime=86400s
+    keylife=3600s
+    keyingtries=%forever   # 永不放弃重试
+    mobike=no
+    dpddelay=30            # 死链检测：30s 探测、120s 判死 → R479 侧亦建议开启 DPD
+    dpdtimeout=120
+    dpdaction=restart
+
+conn home-r479
+    # ---- VPS 侧（left = 本机）----
+    left=%defaultroute           # VPS 公网出口
+    leftid=@vps-nat              # 若 R479 固件只认 IP 型 ID，改为 VPS 公网 IP
+    leftsubnet=0.0.0.0/0         # TODO：仅心跳用途可保持；如需应急中转改为 VPS 内网段(如 172.16.0.0/24)
+
+    # ---- 家侧（right = 动态公网 IP 的 R479）----
+    right=%any                   # 家 IP 动态，接受任意来源发起
+    rightid=%any                 # 家侧 ID 动态；安全靠 PSK 强度，务必强随机
+    rightsubnet=192.168.1.0/24   # TODO: 家 LAN 网段（勘察后按 R479 实际 LAN 段修改）
+
+    # ---- 提案（老平台 R479 兼容组合，务必两端一致）----
+    # R479 高级设置可选：3DES/AES(-128/256)、SHA1/MD5、DH2(1024)/DH5(2048)
+    ike=aes128-sha1-modp1024,aes256-sha1-modp2048!
+    esp=aes128-sha1,aes256-sha1!
+
+    type=tunnel
+    auto=add                     # VPS 被动等待（add 不主动发起）
+    forceencaps=no               # 家侧为公网 IP 无 NAT；若勘察发现光猫为路由模式则改 yes(NAT-T)
