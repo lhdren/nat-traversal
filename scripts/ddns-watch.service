@@ -1,0 +1,21 @@
+[Unit]
+Description=nat-traversal DDNS watcher (IPsec source IP -> Aliyun DNS)
+Documentation=https://github.com/lhdren/nat-traversal
+After=network-online.target strongswan.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/nat-traversal/ddns.conf
+ExecStart=/usr/local/bin/ddns-watch.sh
+Restart=always
+RestartSec=5
+# 简单加固
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/var/lib/nat-traversal
+ProtectHome=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
