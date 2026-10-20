@@ -29,6 +29,7 @@
 - 用户答复⑫：**选定 A（VPS 心跳版）**，方案 v3 全部锁定；仅剩回家勘察 3 项（光猫模式/上行实测/R479固件确认）即可出实施清单
 - 用户答复⑪：疑问 R479↔VPS 隧道是什么、是否借用 VPS、3M 是否拖慢访问 → 已解释：隧道=心跳线（每分钟几个字节），主访问路径完全不经 VPS；同时给出无 VPS 极简备选（R479 内置花生壳 DDNS，放弃自有域名），待用户二选一
 - 执行：按用户指示创建公共仓库 github.com/lhdren/nat-traversal 并上传（方案.md + .planning 过程记录；3 个原子提交；敏感信息扫描通过）
+- 执行：预写 VPS 侧全部脚本并入库推送——README.md、scripts/{ddns-watch.sh, ddns.conf.example, ddns-watch.service, ipsec.conf.example, ipsec.secrets.example, install.sh}，bash -n 全过（本机无 shellcheck）；要点：源IP检测用 xfrm 优先/conntrack 回退、阿里云 HMAC-SHA1 签名手写实现、DRY_RUN+--once 调试开关、ipsec.conf 带 TODO 标注待勘察项；README 含部署步骤与进度清单
 
 ### Test Results
 | Test | Expected | Actual | Status |

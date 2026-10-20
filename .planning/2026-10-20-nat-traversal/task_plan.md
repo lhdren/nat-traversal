@@ -34,6 +34,7 @@ Phase 2
 - **Status:** complete
 
 ### Phase 4: 部署设计与实施
+- [x] 预写（2026-10-20）：README + VPS 侧脚本与模板（ddns-watch.sh / strongSwan 两模板 / install.sh，语法检查通过，已推 GitHub；待勘察后联调）
 - [ ] VPS 侧：strongSwan（IKEv1 站点对站点，对接 R479 IPsec）+ 源 IP 监听脚本 → 阿里云 DNS API 更新 home 子域
 - [ ] R479 侧：L2TP/IPsec 服务器开启（账号/PSK）+ IPsec 策略指向 VPS + 客户端地址池（LAN 网段）
 - [ ] 光猫：桥接（或 DMZ 兜底）确保公网 IP 落在 R479
