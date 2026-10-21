@@ -34,4 +34,4 @@ conn home-r479
 
     type=tunnel
     auto=add                     # VPS 被动等待（add 不主动发起）
-    forceencaps=no               # 家侧为公网 IP 无 NAT；若勘察发现光猫为路由模式则改 yes(NAT-T)
+    forceencaps=no               # 家侧 R479 位于光猫 NAT 后，NAT-T 由两端自动检测启用；如协商异常可改 yes 强制
