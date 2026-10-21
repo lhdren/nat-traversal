@@ -21,11 +21,12 @@ Phase 2
 - **Status:** complete
 
 ### Phase 2: 现状勘察
-- [ ] 光猫工作模式（看 R479 WAN 口 IP 是否公网 → 桥接/路由判定）→ 用户回家看
+- [ ] 光猫：登录（用户已有账号）确认端口映射页可转发 UDP 500/4500→R479（或 DMZ）；记 R479 的 WAN IP 与 LAN 网段——**不改桥接，保持路由模式**
 - [~] 家宽上行带宽：套餐 1000M 已知，上行数值待实测（speedtest）
 - [x] VPS：阿里云入门款 3M 固定带宽 → 角色降级为应急中转+可选轻量 Web 入口
-- [ ] 群晖具体型号 + DSM 版本（回家顺带看信息中心；套件中心确认 VPN Server/Tailscale）
-- [x] 域名：.cn 已备案 → 子域做 DDNS（仅 VPN），主域留 VPS
+- [x] NAS：零参与（型号已无架构影响）
+- [x] 域名：.cn 已备案，NS=阿里云；home 子域 A 记录已手动存在（将由 ddns-watch 接管自动更新）
+- [ ] R479 固件确认（L2TP 服务器页 / IPsec 策略页 / 自动重拨）
 - **Status:** in_progress
 
 ### Phase 3: 方案选型对比与决策
@@ -37,7 +38,7 @@ Phase 2
 - [x] 预写（2026-10-20）：README + VPS 侧脚本与模板（ddns-watch.sh / strongSwan 两模板 / install.sh，语法检查通过，已推 GitHub；待勘察后联调）
 - [ ] VPS 侧：strongSwan（IKEv1 站点对站点，对接 R479 IPsec）+ 源 IP 监听脚本 → 阿里云 DNS API 更新 home 子域
 - [ ] R479 侧：L2TP/IPsec 服务器开启（账号/PSK）+ IPsec 策略指向 VPS + 客户端地址池（LAN 网段）
-- [ ] 光猫：桥接（或 DMZ 兜底）确保公网 IP 落在 R479
+- [ ] 光猫：保持路由模式，端口转发 UDP 500/4500 → R479（或 DMZ 兜底；LAN 网段冲突则改 R479 LAN）
 - [ ] 客户端配置模板（iOS/macOS/Windows/Android 系统 L2TP）
 - [ ] 分步实施清单输出（每步含回滚方法）
 - **Status:** pending
